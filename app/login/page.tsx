@@ -9,7 +9,7 @@ import {Separator} from "@/components/ui/separator";
 const Login = () => {
     return (
         <div className={"h-screen w-screen bg-white flex"}>
-            <div className="w-1/2 h-screen justify-center items-center flex relative">
+            <div className="w-1/2 h-screen justify-center items-center  relative sm:hidden md:hidden lg:flex hidden">
                 <img style={{height: '98%', width: '98%'}} className={"object-cover rounded-3xl"}
                      src="https://voguebebucket.s3.amazonaws.com/pexels-david-geib-3268732.jpg"
                      alt=""/>
@@ -33,7 +33,7 @@ const Login = () => {
                 </div>
 
             </div>
-            <div className="w-1/2  h-screen flex flex-col justify-between">
+            <div className="w-full lg:w-1/2 p-10   h-screen flex flex-col justify-between">
                 <div className={"flex justify-center items-center mt-10 gap-1"}>
                     <Image
                         src={'https://voguebebucket.s3.amazonaws.com/Screenshot_2024-01-21_085837-removebg-preview.png'}
