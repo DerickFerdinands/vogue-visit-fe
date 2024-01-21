@@ -5,17 +5,18 @@ import {Label} from "@/components/ui/label"
 import {Button} from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox";
 import {Separator} from "@/components/ui/separator";
+import Link from "next/link";
 
 const Login = () => {
     return (
         <div className={"h-screen w-screen bg-white flex"}>
             <div className="w-1/2 h-screen justify-center items-center  relative sm:hidden md:hidden lg:flex hidden">
                 <img style={{height: '98%', width: '98%'}} className={"object-cover rounded-3xl"}
-                     src="https://voguebebucket.s3.amazonaws.com/pexels-david-geib-3268732.jpg"
+                     src="https://voguebebucket.s3.amazonaws.com/pexels-cottonbro-studio-3993472.jpg"
                      alt=""/>
 
 
-                <div className={"absolute z-10 text-black top-10 left-10 flex flex-wrap w-max"}>
+                <div className={"absolute z-10 text-white top-10 left-10 flex flex-wrap w-max hidden"}>
                     <p className="leading-7  [&:not(:first-child)]:mt-1 uppercase max-w-md">
                         Style your moments, book your beauty – where elegance meets convenience!
                     </p>
@@ -46,8 +47,8 @@ const Login = () => {
                         Vogue Visit
                     </h4>
                 </div>
-                <div className={"flex flex-col gap-10 items-center"}>
-                    <div className={"text-center"}>
+                <div className={"flex flex-col gap-10 items-center "}>
+                    <div className={"text-center mt-5"}>
                         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                             Welcome Back
                         </h1>
@@ -96,9 +97,9 @@ const Login = () => {
                             Sign In with Google</Button>
                     </div>
                 </div>
-                <div className={"flex justify-center items-center mb-10"}>
+                <div className={"flex justify-center items-center mb-10 mt-5"}>
                     <p className="leading-7 [&:not(:first-child)]:mt-6 text-black">
-                        <span className={"text-gray-700"}>Dont have an account? </span> <span className={"text-black font-bold"}>Sign Up</span>
+                        <span className={"text-gray-700"}>Dont have an account? </span> <Link href={'/sign-up'}><span className={"text-black font-bold"}>Sign Up</span></Link>
                     </p>
                 </div>
             </div>
