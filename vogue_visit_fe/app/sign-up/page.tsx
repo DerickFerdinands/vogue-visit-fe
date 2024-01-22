@@ -1,4 +1,5 @@
-import React from 'react';
+'use client'
+import React, {useEffect} from 'react';
 import Image from "next/image";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
@@ -6,8 +7,57 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
+import {useRouter} from "next/navigation";
+import {useForm} from "react-hook-form";
+import axios from "@/lib/HttpInterceptor";
 
 const SignUp = () => {
+
+
+    const router = useRouter();
+    const { register, handleSubmit, formState: { errors }, watch } = useForm();
+
+    useEffect(() => {
+        const token = localStorage.getItem("jwt_token");
+        if(token !==null){
+            router.push('/');
+        }
+    }, []);
+
+    const onSubmit = async (data:any) => {
+        console.log(data); // Submit data to server or perform other actions
+
+        try {
+            data.id=null;
+            const resp =  await axios.post('/users/',data);
+
+            if(resp.status, resp.data.data){
+                localStorage.setItem('jwt_token',resp.data.data)
+                router.push('/'); // Navigate to /dashboard
+            }
+
+            // Handle successful login based on the API response
+        } catch (error) {
+            // setError(error.message);
+            console.log(error)
+        } finally {
+            // setIsLoading(false);
+        }
+    };
+
+    // @ts-ignore
+    const validateConfirmPassword = (value) => {
+        const password = watch('password'); // Access the current value of the 'password' field
+        return validateFieldsAreEqual(value, password);
+    };
+    // @ts-ignore
+    const validateFieldsAreEqual = (value1, value2) => {
+        if (value1 !== value2) {
+            return 'Fields must be equal';
+        }
+        return undefined; // No error
+    };
+
     return (
         <div className={"h-screen w-screen bg-white flex"}>
 
@@ -34,15 +84,17 @@ const SignUp = () => {
                         </p>
                     </div>
 
+                    <form className={"max-w-md w-full flex flex-col gap-10 items-center"} onSubmit={handleSubmit(onSubmit)}>
                     <div className={"flex flex-col items-center relative gap-5 w-full max-w-md"}>
                         <div className="grid w-full max-w-md items-center gap-3">
                             <Label htmlFor="name">Full name</Label>
-                            <Input type="text" id="name" placeholder="John Lamar"/>
+                            <Input {...register('name', { required: true })} type="text" id="name" placeholder="John Lamar"/>
+                            {errors.name && <span className={"text-red-700 text-sm ms-1"}>*Name is required</span>}
                         </div>
 
                         <div className={"w-full"}>
                             <Label htmlFor="email">Gender</Label>
-                            <RadioGroup style={{display: 'flex'}}
+                            <RadioGroup {...register('gender', { required: true })} style={{display: 'flex'}}
                                         className={"justify-start items-start w-full my-3 mb-7"}
                                         defaultValue="Male">
                                 <div className="flex items-center space-x-2">
@@ -58,33 +110,38 @@ const SignUp = () => {
                                     <Label htmlFor="r3">Custom</Label>
                                 </div>
                             </RadioGroup>
-
+                            {errors.gender && <span className={"text-red-700 text-sm ms-1"}>*Gender is required</span>}
                             <div className="grid w-full max-w-md items-center gap-3">
                                 <Label htmlFor="age">Age</Label>
-                                <Input type="number" id="age" placeholder="21"/>
+                                <Input {...register('age', { required: true })} type="number" id="age" placeholder="21"/>
+                                {errors.age && <span className={"text-red-700 text-sm ms-1"}>*Age is required</span>}
                             </div>
                         </div>
 
                         <div className="grid w-full max-w-md items-center gap-3">
                             <Label htmlFor="email">Email</Label>
-                            <Input type="email" id="email" placeholder="Enter your email"/>
+                            <Input {...register('email', { required: true })} type="email" id="email" placeholder="Enter your email"/>
+                            {errors.email && <span className={"text-red-700 text-sm ms-1"}>*Email is required</span>}
                         </div>
 
                         <div className="grid w-full max-w-md items-center gap-3">
                             <Label htmlFor="password">Password</Label>
-                            <Input type="password" id="password" placeholder="Enter your password"/>
+                            <Input {...register('password', { required: true })} type="password" id="password" placeholder="Enter your password"/>
+                            {errors.password && <span className={"text-red-700 text-sm ms-1"}>*Password is required</span>}
+
                         </div>
 
                         <div className="grid w-full max-w-md items-center gap-3">
                             <Label htmlFor="cpassword">Confirm your password</Label>
-                            <Input type="password" id="cpassword" placeholder="Enter your password again"/>
+                            <Input {...register('confirmPassword', { required: true, validate: validateConfirmPassword })}  type="password" id="cpassword" placeholder="Enter your password again"/>
+                            {errors.confirmPassword && <span className={"text-red-700 text-sm ms-1"}>Passwords must match</span>}
                         </div>
 
 
                     </div>
 
                     <div className={"w-full max-w-md flex flex-col gap-3"}>
-                        <Button className={"w-full"}>Sign Up</Button>
+                        <Button type={"submit"} className={"w-full"}>Sign Up</Button>
                         <Button variant={"outline"} className={"w-full flex justify-center items-center gap-2"}>
                             <Image
                                 src={'https://www.svgrepo.com/show/303108/google-icon-logo.svg'}
@@ -95,6 +152,7 @@ const SignUp = () => {
                             />
                             Sign Up with Google</Button>
                     </div>
+                    </form>
                 </div>
                 <div className={"flex justify-center items-center mb-10 mt-5"}>
                     <p className="leading-7 [&:not(:first-child)]:mt-6 text-black">
